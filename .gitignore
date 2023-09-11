@@ -1,0 +1,26 @@
+.idea
+.build
+*.log
+*.pyc
+venv
+certs
+
+# Files
+.DS_store
+tags
+
+# Dir
+__pycache__
+/.cache/*
+/.idea/*
+/src/
+/test_data/temp/
+.venv
+**/.cache
+.pytest_cache
+report
+/app_builds/
+failures
+/web/drivers
+*/allure
+**/allure-results/
