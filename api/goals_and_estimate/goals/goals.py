@@ -42,7 +42,7 @@ class Goals(Request):
             goal_id: id цели
             json: тело запроса
         """
-        return self.request(method='PATCH', url=f'{self.url}/goals/{goal_id}', json=json)
+        return self.request(method='POST', url=f'{self.url}/goals/{goal_id}', json=json)
 
     def get_goal_for_goals_panel(self, query_params: dict) -> Response:
         """Получение целей для панели целей
