@@ -3,7 +3,7 @@ from requests import Response
 from api.custom_requests import Request
 from api.goals_and_estimate.goals.goals import Goals
 
-class Goals_kpi(Goals, Request):
+class Goals_kpi(Request):
     """Класс сервиса "Цели" """
 
     NAME = Services.APP_GOALS
