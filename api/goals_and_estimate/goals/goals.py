@@ -142,7 +142,7 @@ class Goals(Request):
             json: тело запроса
         """
         return self.request(
-            method='PATCH',
+            method='POST',
             url=f'{self.url}/goals/{goal_id}/key-result/binary/{key_result_id}/progress',
             json=json
         )

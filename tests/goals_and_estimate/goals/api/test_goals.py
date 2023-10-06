@@ -126,7 +126,7 @@ class TestGoals(GoalsAPI):
     @title('Получить цель по id')
     @mark.dependency(depends=['create_goal'])
     def test_get_goals_on_id(self, auth_api: str):
-        response = Goals().get_goals_on_id(
+        response = Goals(version=2).get_goals_on_id(
             goal_id=self.goal_id
         )
         assert response.status_code == 200, ERROR_STATUS_MSG.format(code=response.status_code)
