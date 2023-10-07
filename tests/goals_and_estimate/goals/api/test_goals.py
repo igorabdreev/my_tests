@@ -1,4 +1,5 @@
 from tests.goals_and_estimate.allure_constants import GoalsAPI
+from api.goals_and_estimate.request_body.request_body import Request_body
 from allure import story, title, link
 from api.goals_and_estimate.goals.goals import Goals
 from tests.constants import ERROR_STATUS_MSG
@@ -31,22 +32,9 @@ class TestGoals(GoalsAPI):
     @mark.dependency(name='create_goal')
     def test_create_goal(self, auth_api: str):
         response = Goals().create_goal(
-            json={
-                'assignees': [],
-                'description': '',
-                'endDate': self.current_year_end,
-                'keyResults': [],
-                'periodEnd': 'Q4',
-                'periodStart': 'Q4',
-                'reporterId': self.user_uuid,
-                'startDate': self.current_year_start,
-                'title': get_random_string(),
-                'type': 'STANDARD',
-                'visibility': 'VISIBLE',
-                'weight': {'Q1': 0, 'Q2': 0, 'Q3': 0, 'Q4': 0, 'Y': 0},
-                'yearGoal': False,
-                'fileIds': []
-            }
+            json=Request_body.json_create_goal(current_year_start=self.current_year_start,
+                                               current_year_end=self.current_year_end,
+                                               user_uuid=self.user_uuid)
         )
         assert response.status_code == 201, ERROR_STATUS_MSG.format(code=response.status_code)
         TestGoals.goal_id = response.json()['id']
@@ -70,19 +58,9 @@ class TestGoals(GoalsAPI):
     def test_edit_goal(self, auth_api: str):
         response = Goals(version=2).edit_goal(
             goal_id=self.goal_id,
-            json={
-                "title": get_random_string(),
-                "description": get_random_string(),
-                "visibility": "VISIBLE",
-                "isRiskState": True,
-                "riskComment": get_random_string(),
-                "startDate": self.current_year_start,
-                "endDate": self.current_year_end,
-                "periodStart": "Q1",
-                "periodEnd": "Q4",
-                "isYearGoal": True,
-                'weight': {'Q1': 0, 'Q2': 0, 'Q3': 0, 'Q4': 0, 'Y': 0}
-            }
+            json=Request_body.json_edit_goal(current_year_start=self.current_year_start,
+                                             current_year_end=self.current_year_end,
+                                             isYearGoal=True)
         )
         assert response.status_code == 204, ERROR_STATUS_MSG.format(code=response.status_code)
 
