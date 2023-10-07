@@ -50,3 +50,36 @@ class Request_body():
             'weight': weight
         }
         return json_edit_goal
+
+    @staticmethod
+    def json_create_goal_with_kpi(startDate, endDate):
+
+        json_create_goal_with_kpi = {
+            'assignees': [],
+            'description': '',
+            'startDate': startDate,
+            'endDate': endDate,
+            'keyResults': [{"id": "-1",
+                            "type": "KPI",
+                            "title": get_random_string(),
+                            "description": "",
+                            "targetValue": 1000,
+                            "valueMin": 800,
+                            "valueMax": 1200,
+                            "progressMin": 85,
+                            "progressMax": 120,
+                            "metric": "штук",
+                            "status": "DONE",
+                            "startDate": "2023-10-06T06:14:28.732Z",
+                            "endDate": "2023-12-31"}],
+            'periodEnd': 'Q1',
+            'periodStart': 'Q4',
+            'reporterId': self.user_uuid,
+            'title': get_random_string(),
+            'type': 'STANDARD',
+            'visibility': 'VISIBLE',
+            'weight': {'Q1': 5, 'Q2': 5, 'Q3': 5, 'Q4': 5, 'Y': 5},
+            'yearGoal': True,
+            'fileIds': []
+        }
+        return json_create_goal_with_kpi
