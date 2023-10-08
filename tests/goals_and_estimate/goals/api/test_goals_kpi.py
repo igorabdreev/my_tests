@@ -30,23 +30,22 @@ class TestGoals(GoalsAPI):
     @mark.dependency(name='create_goal')
     def test_create_goal_kpi(self, auth_api: str):
         response = Goals().create_goal(
-            json= Request_body.json_create_goal_with_kpi(user_uuid=self.user_uuid)
+            json=Request_body.json_create_goal_with_kpi(user_uuid=self.user_uuid)
         )
         assert response.status_code == 201, ERROR_STATUS_MSG.format(code=response.status_code)
         TestGoals.goal_id = response.json()['id']
-        TestGoals.key_result_id = Goals(version=2).get_goals_on_id(goal_id=self.goal_id).json()['goal']['keyResults']['keyResults'][0]['id']
-
+        TestGoals.key_result_id = \
+        Goals(version=2).get_goals_on_id(goal_id=self.goal_id).json()['goal']['keyResults']['keyResults'][0]['id']
 
     @link(*get_link(test=39575))
     @title('Выполнить ключевой результат kpi')
     @mark.dependency(depends=['create_goal'])
     def test_done_key_result_kpi(self, auth_api: str):
         response = Goals_kpi().done_key_result_kpi(
-                goal_id=self.goal_id,
-                key_result_id=self.key_result_id,
-                json=Request_body.json_create_kr_binary(self.current_year_end)
-            )
+            goal_id=self.goal_id,
+            key_result_id=self.key_result_id,
+            json=Request_body.json_done_key_result_kpi(value="1200", date=self.current_year_start)
+        )
 
         assert response.status_code == 204, ERROR_STATUS_MSG.format(code=response.status_code)
         Goals().delete_goal(goal_id=self.goal_id)
-

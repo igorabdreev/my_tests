@@ -4,6 +4,18 @@ from generators.randoms import get_random_string
 class Request_body():
 
     @staticmethod
+    def json_done_key_result_kpi(value, date):
+        """ Параметры для выполнения цели KPI
+        """
+        done_key_result_kpi = {
+            "comment":get_random_string(),
+            "value":value,
+            "date":date
+        }
+        return done_key_result_kpi
+
+
+    @staticmethod
     def json_create_goal(current_year_start, current_year_end, user_uuid, periodStart='Q4', periodEnd='Q4',
                          yearGoal=False,
                          weight=None):
