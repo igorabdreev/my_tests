@@ -1,7 +1,7 @@
 from tests.goals_and_estimate.allure_constants import GoalsAPI
+from api.goals_and_estimate.request_body.request_body import Request_body
 from api.goals_and_estimate.goals.goals_kpi import Goals_kpi
 from api.goals_and_estimate.goals.goals import Goals
-from generators.randoms import get_random_string
 from tests.constants import ERROR_STATUS_MSG
 from allure import story, title, link
 from pytest import mark
@@ -23,8 +23,6 @@ class TestGoals(GoalsAPI):
     @staticmethod
     def set_up():
         TestGoals.current_year_start = get_datetime_with_offset(fmt='%Y-%m-%d')
-            # TestGoals.current_year_end = get_datetime_with_offset(fmt='%Y-%m-%d', days=1)
-            # TestGoals.current_year = int(get_datetime_with_offset(fmt='%Y'))
         TestGoals.user_uuid = get_user_data_from_keycloak(user=DIRECTOR_GOALS, field=KeycloakGen.person_id)
 
     @link(*get_link(test=39545))
@@ -32,34 +30,7 @@ class TestGoals(GoalsAPI):
     @mark.dependency(name='create_goal')
     def test_create_goal_kpi(self, auth_api: str):
         response = Goals().create_goal(
-            json={
-                'assignees': [],
-                'description': '',
-                'startDate': "2023-01-01",
-                'endDate': "2023-12-31",
-                'keyResults': [{"id": "-1",
-                                "type": "KPI",
-                                "title": get_random_string(),
-                                "description": "",
-                                "targetValue": 1000,
-                                "valueMin": 800,
-                                "valueMax": 1200,
-                                "progressMin": 85,
-                                "progressMax": 120,
-                                "metric": "штук",
-                                "status": "DONE",
-                                "startDate": "2023-10-06T06:14:28.732Z",
-                                "endDate": "2023-12-31"}],
-                'periodEnd': 'Q1',
-                'periodStart': 'Q4',
-                'reporterId': self.user_uuid,
-                'title': get_random_string(),
-                'type': 'STANDARD',
-                'visibility': 'VISIBLE',
-                'weight': {'Q1': 5, 'Q2': 5, 'Q3': 5, 'Q4': 5, 'Y': 5},
-                'yearGoal': True,
-                'fileIds': []
-            }
+            json= Request_body.json_create_goal_with_kpi(user_uuid=self.user_uuid)
         )
         assert response.status_code == 201, ERROR_STATUS_MSG.format(code=response.status_code)
         TestGoals.goal_id = response.json()['id']
@@ -73,12 +44,7 @@ class TestGoals(GoalsAPI):
         response = Goals_kpi().done_key_result_kpi(
                 goal_id=self.goal_id,
                 key_result_id=self.key_result_id,
-                json={
-                    "comment": '',
-                    "date": self.current_year_start,
-                    "value": '1200'
-
-                }
+                json=Request_body.json_create_kr_binary(self.current_year_end)
             )
 
         assert response.status_code == 204, ERROR_STATUS_MSG.format(code=response.status_code)
