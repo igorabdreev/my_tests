@@ -14,6 +14,7 @@ from generators.date import get_datetime_with_offset
 from generators.enums import KeycloakGen
 
 
+
 @mark.usefixtures('set_up')
 @mark.parametrize('auth_api', [EMPLOYEE_GOALS], indirect=True)
 class TestCrateGoalsAndCheckStatistic(GoalsAPI):
