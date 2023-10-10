@@ -1,3 +1,5 @@
+import pytest
+
 from tests.goals_and_estimate.allure_constants import GoalsAPI
 from api.goals_and_estimate.request_body.request_body import Request_body
 from allure import story, title, link
@@ -14,7 +16,6 @@ from generators.date import get_datetime_with_offset
 from generators.enums import KeycloakGen
 
 
-
 @mark.usefixtures('set_up')
 @mark.parametrize('auth_api', [EMPLOYEE_GOALS], indirect=True)
 class TestCrateGoalsAndCheckStatistic(GoalsAPI):
@@ -27,8 +28,31 @@ class TestCrateGoalsAndCheckStatistic(GoalsAPI):
                                                                                 field=KeycloakGen.person_id)
         TestCrateGoalsAndCheckStatistic.current_year = int(get_datetime_with_offset(fmt='%Y'))
 
+    @staticmethod
+    @pytest.fixture()
+    def get_weight_on_goal():
+        """
+        Фикстура для получения прогресса виджета на главной странице цели
+
+        """
+        response = Goals().get_goal(
+            query_params={
+                'year': 2023,
+                'period': 'Q1'
+
+            }
+        )
+        r = response.json()['progress']['disableWeight']
+        r2 = response.json()['progress']['enableWeight']
+
+        return (r, r2, response)
+
     @mark.dependency(name='create_goal')
     def test_1(self, auth_api: str):
+        """Тест создания цели с КР, выполнения КР и получения
+        goal_id - id цели
+        kr_id - id КР
+        """
         response = Goals().create_goal(
             json=Request_body.json_create_goal_with_kr(user_uuid=self.user_uuid, yearGoal=False, startDate="2023-01-01",
                                                        endDate="2023-03-31",
@@ -44,25 +68,17 @@ class TestCrateGoalsAndCheckStatistic(GoalsAPI):
             json={'status': "DONE"}
         )
 
-    def test_get_weight_on_goal(self, auth_api: str):
-        response = Goals().get_goal(
-            query_params={
-                'year': self.current_year,
-                'period': 'Q1'
-
-            }
-        )
-        r = response.json()['progress']['disableWeight']
-
-        assert r == 100, ERROR_MSG_WIDGET.format(
-            json=response.json()['progress']['disableWeight'])
-        r2 = response.json()['progress']['enableWeight']
-        assert r2 == 50, ERROR_MSG_WIDGET.format(
-            json=response.json()['progress']['enableWeight'])
+    def test_get_weight_on_goal(self, auth_api: str, get_weight_on_goal):
+        """Тест для проверки получения прогресса виджета на главной странице цели
+        """
+        assert get_weight_on_goal[0] == 100, ERROR_MSG_WIDGET.format(
+            json=get_weight_on_goal[3].json()['progress']['disableWeight'])
+        assert get_weight_on_goal[1] == 50, ERROR_MSG_WIDGET.format(
+            json=get_weight_on_goal[3].json()['progress']['enableWeight'])
 
 
 
-
+    def test_statistic_in_statistic(self, auth_api: str, get_weight_on_goal):
         response1 = Statistics(version=2).get_statistics_team_table(
             period='Q1',
             year=self.current_year,
@@ -70,8 +86,8 @@ class TestCrateGoalsAndCheckStatistic(GoalsAPI):
             page_size=10
         )
 
-        assert response1.json()['table']['data'][0]['progress']['progressWithDisableWeight'] == r
-        assert response1.json()['table']['data'][0]['progress']['progressWithEnableWeight'] == r2
+        assert response1.json()['table']['data'][0]['progress']['progressWithDisableWeight'] == get_weight_on_goal[0]
+        assert response1.json()['table']['data'][0]['progress']['progressWithEnableWeight'] == get_weight_on_goal[1]
         assert response1.json()['table']['data'][0]['goals']['countGoalsAll'] == 1
         response = Goals().create_key_result(goal_id=self.goal_id,
                                              json=Request_body.json_create_kr_metric(endDate="2023-03-31"))
