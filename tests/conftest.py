@@ -1,5 +1,4 @@
 from typing import Iterable
-
 from _pytest.fixtures import SubRequest
 from allure import step, title
 from pytest import fixture
@@ -164,3 +163,7 @@ def open_auth_web(request: SubRequest, driver):
         (auth_p := AuthPage(driver=driver)).get()
 
     yield auth_p
+
+
+
+
