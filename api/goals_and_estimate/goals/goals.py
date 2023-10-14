@@ -147,6 +147,20 @@ class Goals(Request):
             json=json
         )
 
+    def done_key_result_metric(self, goal_id: str, key_result_id: str, json: dict) -> Response:
+        """Выполнить ключевой результат
+
+        Args:
+            goal_id: id цели
+            key_result_id: id ключевого результата
+            json: тело запроса
+        """
+        return self.request(
+            method='POST',
+            url=f'{self.url}/goals/{goal_id}/key-result/metric/{key_result_id}/progress',
+            json=json
+        )
+
     def delete_goal(self, goal_id: str) -> Response:
         """Удалить цель
 

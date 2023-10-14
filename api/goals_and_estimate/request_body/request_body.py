@@ -154,3 +154,18 @@ class Request_body():
             "targetProgress": targetProgress
         }
         return json_create_kr_metric
+
+    @staticmethod
+    def json_create_weight():
+        json = {
+            "Q1": 25,
+            "Q2": 0,
+            "Q3": 0,
+            "Q4": 0,
+            "Y": 0
+        }
+        return json
+
+    @staticmethod
+    def json_done_key_result_metric():
+        json = {currentProgress: currentProgress}
