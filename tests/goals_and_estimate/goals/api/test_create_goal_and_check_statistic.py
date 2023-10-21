@@ -1,5 +1,5 @@
 from tests.goals_and_estimate.allure_constants import GoalsAPI
-from api.goals_and_estimate.goals.goals import Goals
+from api.goals_and_estimate.goals.goals_request import Goals
 from api.goals_and_estimate.request_body.request_body import Request_body
 from tests.constants import Ansver
 from users.goals import EMPLOYEE_GOALS

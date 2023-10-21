@@ -1,6 +1,20 @@
+import json
+
 from services import Services
 from requests import Response
 from api.custom_requests import Request
+from api.goals_and_estimate.goals.goals_response import GoalServiceResponse
+from dto.goals_and_estimate.app_goals.schema.goal_request_dto import (
+    AbstractGoalEditRequest,
+    CreateGoalForOtherRequestV1,
+    CreateGoalRequestV1
+)
+from dto.goals_and_estimate.app_goals.schema.goals_response_dto import (
+    GoalFullAloneResponse,
+    GoalInfoShortResponseV2,
+    GoalsWithMetaDataResponse,
+    KitPersonInviteResponse
+)
 
 
 class Goals(Request):
@@ -13,13 +27,23 @@ class Goals(Request):
         self.headers.update({"Content-Type": "application/json"})
         self.url = f'{self.url}/api/v{version}'
 
-    def create_goal(self, json: dict) -> Response:
+    # def create_goal(self, json: dict) -> Response:
+    #     """ Создать цель
+    #
+    #     Args:
+    #         json: тело запроса
+    #     """
+    #     return self.request(method='post', url=f'{self.url}/goals', json=json)
+
+    def create_goal(self, json: dict) -> GoalServiceResponse:
         """ Создать цель
 
         Args:
             json: тело запроса
         """
-        return self.request(method='post', url=f'{self.url}/goals', json=json)
+        return GoalServiceResponse(response=self.request(method='post', url=f'{self.url}/goals', json=json),
+                                   data_model=GoalFullAloneResponse)
+
 
     def get_goal(self, query_params: dict) -> Response:
         """ Получить текущие цели

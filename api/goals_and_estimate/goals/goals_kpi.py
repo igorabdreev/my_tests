@@ -1,7 +1,7 @@
 from services import Services
 from requests import Response
 from api.custom_requests import Request
-from api.goals_and_estimate.goals.goals import Goals
+from api.goals_and_estimate.goals.goals_request import Goals
 
 class Goals_kpi(Request):
     """Класс сервиса "Цели" """

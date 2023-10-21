@@ -1,7 +1,7 @@
 from tests.goals_and_estimate.allure_constants import GoalsAPI
 from api.goals_and_estimate.request_body.request_body import Request_body
 from api.goals_and_estimate.goals.goals_kpi import Goals_kpi
-from api.goals_and_estimate.goals.goals import Goals
+from api.goals_and_estimate.goals.goals_request import Goals
 from tests.constants import ERROR_STATUS_MSG
 from allure import story, title, link
 from pytest import mark

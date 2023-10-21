@@ -1,4 +1,4 @@
-from api.goals_and_estimate.goals.goals import Goals
+from api.goals_and_estimate.goals.goals_request import Goals
 from api.goals_and_estimate.goals.goals_statistic import Statistics
 from pytest import fixture
 
