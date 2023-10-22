@@ -21,11 +21,26 @@ class Goals(Request):
     """Класс сервиса "Цели" """
 
     NAME = Services.APP_GOALS
+    #
+    # def __init__(self, url, version: int = 1):
+    #     super().__init__()
+    #     self.headers.update({"Content-Type": "application/json"})
+    #     self.url = f'{self.url}/api/v{version}'
 
     def __init__(self, version: int = 1):
         super().__init__()
-        self.headers.update({"Content-Type": "application/json"})
-        self.url = f'{self.url}/api/v{version}'
+        # self.headers.update({"Content-Type": "application/json"})
+        # self.headers.update({'Transfer-Encoding': 'chunked', 'Server': 'Jetty(6.1.26)'}
+# )
+        self.url = f'{self.url}'
+
+    # def create_goal(self, json: dict) -> Response:
+    #     """ Создать цель
+    #
+    #     Args:
+    #         json: тело запроса
+    #     """
+    #     return self.request(method='post', url=f'{self.url}/creategoals', json=json)
 
     # def create_goal(self, json: dict) -> Response:
     #     """ Создать цель
@@ -34,6 +49,15 @@ class Goals(Request):
     #         json: тело запроса
     #     """
     #     return self.request(method='post', url=f'{self.url}/goals', json=json)
+    #
+    # def create_goal(self, json: dict) -> GoalServiceResponse:
+    #     """ Создать цель
+    #
+    #     Args:
+    #         json: тело запроса
+    #     """
+    #     return GoalServiceResponse(response=self.request(method='post', url=f'{self.url}/goals', json=json),
+    #                                data_model=GoalFullAloneResponse)
 
     def create_goal(self, json: dict) -> GoalServiceResponse:
         """ Создать цель
@@ -41,7 +65,7 @@ class Goals(Request):
         Args:
             json: тело запроса
         """
-        return GoalServiceResponse(response=self.request(method='post', url=f'{self.url}/goals', json=json),
+        return GoalServiceResponse(response=self.request(method='post', url=f'{self.url}/creategoals', json=json),
                                    data_model=GoalFullAloneResponse)
 
 

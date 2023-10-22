@@ -30,8 +30,8 @@ class Request:
     NAME: str
 
     def __init__(self):
-        self.url = 'https://hr-ift.sberbank.ru/api-web/app-goals'
-
+        # self.url = 'https://hr-ift.sberbank.ru/api-web/app-goals'
+        self.url = 'http://localhost:8080'
     def __new__(cls, *args, **kwargs):
         """ Создать новый объект класса API
 
