@@ -68,27 +68,29 @@ class GoalWithoutReferences(GoalsDto):
 
 
 class GoalWithoutRelatives(GoalWithoutReferences):
-    """ Модель описания цели без родственных """
-    reporter: AssigneeResponse = Field(description='От кого цель')
-    responsible: AssigneeResponse = Field(description='Ответственный')
-    assignees: list[AssigneeResponse] = Field(description='Назначенные')
-    keyResults: list[AbstractKeyResultResponseDto] = Field(description='Ключевой результат цели')
+    pass
+#     """ Модель описания цели без родственных """
+#     reporter: AssigneeResponse = Field(description='От кого цель')
+#     responsible: AssigneeResponse = Field(description='Ответственный')
+#     assignees: list[AssigneeResponse] = Field(description='Назначенные')
+#     keyResults: list[AbstractKeyResultResponseDto] = Field(description='Ключевой результат цели')
 
 
 class GoalFullAloneResponse(GoalWithoutRelatives):
-    """ Модель описания цели """
-    startDate: datetime.date = Field(description='Дата начала')
-    yearGoal: datetime.date = Field(description='Цель на год')
-    childrenGoals: list[GoalWithoutRelatives] = Field(description='Дочерние цели')
-    parentGoal: Optional[GoalWithoutRelatives] = Field(description='Вышестоящая цель')
-    fireState: FireState = Field(description='')
-    isRiskState: StrictBool = Field(description='Цель под риском')
-    riskComment: StrictStr = Field(description='Комментарий цели под риском')
-    isFreeze: StrictBool = Field(description='Заморозка цели')
-    type: GoalType = Field(description='Тип цели')
-    files: Optional[list[GoalFireResponse]] = Field(description='Файлы цели')
-    weight: GoalWeightResponse = Field(description='Вес цели')
-    keyResults: GoalKRResponse = Field(description='Ключевой результат цели')
+    pass
+#     """ Модель описания цели """
+#     startDate: datetime.date = Field(description='Дата начала')
+#     yearGoal: datetime.date = Field(description='Цель на год')
+#     childrenGoals: list[GoalWithoutRelatives] = Field(description='Дочерние цели')
+#     parentGoal: Optional[GoalWithoutRelatives] = Field(description='Вышестоящая цель')
+#     fireState: FireState = Field(description='')
+#     isRiskState: StrictBool = Field(description='Цель под риском')
+#     riskComment: StrictStr = Field(description='Комментарий цели под риском')
+#     isFreeze: StrictBool = Field(description='Заморозка цели')
+#     type: # GoalType = Field(description='Тип цели')
+#     files: Optional[list[GoalFireResponse]] = Field(description='Файлы цели')
+#     weight: GoalWeightResponse = Field(description='Вес цели')
+#     keyResults: GoalKRResponse = Field(description='Ключевой результат цели')
 
 
 class GoalFullResponse(GoalFullAloneResponse):

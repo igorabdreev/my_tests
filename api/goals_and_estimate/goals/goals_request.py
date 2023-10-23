@@ -11,6 +11,7 @@ from dto.goals_and_estimate.app_goals.schema.goal_request_dto import (
 )
 from dto.goals_and_estimate.app_goals.schema.goals_response_dto import (
     GoalFullAloneResponse,
+    GoalWithoutReferences,
     GoalInfoShortResponseV2,
     GoalsWithMetaDataResponse,
     KitPersonInviteResponse
@@ -21,6 +22,7 @@ class Goals(Request):
     """Класс сервиса "Цели" """
 
     NAME = Services.APP_GOALS
+
     #
     # def __init__(self, url, version: int = 1):
     #     super().__init__()
@@ -29,9 +31,6 @@ class Goals(Request):
 
     def __init__(self, version: int = 1):
         super().__init__()
-        # self.headers.update({"Content-Type": "application/json"})
-        # self.headers.update({'Transfer-Encoding': 'chunked', 'Server': 'Jetty(6.1.26)'}
-# )
         self.url = f'{self.url}'
 
     # def create_goal(self, json: dict) -> Response:
@@ -40,24 +39,7 @@ class Goals(Request):
     #     Args:
     #         json: тело запроса
     #     """
-    #     return self.request(method='post', url=f'{self.url}/creategoals', json=json)
-
-    # def create_goal(self, json: dict) -> Response:
-    #     """ Создать цель
-    #
-    #     Args:
-    #         json: тело запроса
-    #     """
     #     return self.request(method='post', url=f'{self.url}/goals', json=json)
-    #
-    # def create_goal(self, json: dict) -> GoalServiceResponse:
-    #     """ Создать цель
-    #
-    #     Args:
-    #         json: тело запроса
-    #     """
-    #     return GoalServiceResponse(response=self.request(method='post', url=f'{self.url}/goals', json=json),
-    #                                data_model=GoalFullAloneResponse)
 
     def create_goal(self, json: dict) -> GoalServiceResponse:
         """ Создать цель
@@ -68,14 +50,22 @@ class Goals(Request):
         return GoalServiceResponse(response=self.request(method='post', url=f'{self.url}/creategoals', json=json),
                                    data_model=GoalFullAloneResponse)
 
+    # def get_goal(self, query_params: dict) -> Response:
+    #     """ Получить текущие цели
+    #
+    #     Args:
+    #         query_params: query параметры запроса
+    #     """
+    #     return self.request(method='GET', url=f'{self.url}/dashboard/bar', params=query_params)
 
-    def get_goal(self, query_params: dict) -> Response:
+    def get_goal(self, query_params: dict) -> GoalServiceResponse:
         """ Получить текущие цели
 
         Args:
             query_params: query параметры запроса
         """
-        return self.request(method='GET', url=f'{self.url}/dashboard/bar', params=query_params)
+        return GoalServiceResponse(response=self.request(method='GET', url=f'{self.url}/getgoals', params=query_params),
+                                   data_model=GoalInfoShortResponseV2)
 
     def get_modal_window_for_create_goal(self) -> Response:
         """Получение данных для отображения модалки 'Создание цели'
