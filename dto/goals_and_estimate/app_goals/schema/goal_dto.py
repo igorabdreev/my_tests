@@ -33,6 +33,8 @@ class AssigneeResponse(GoalsDto):
     comment: StrictStr = Field(description='комментарий')
 
 
+
+
 class GoalAssigneesResponseV2(GoalsDto):
     """ Модель описания назначенного версии 2 """
     author: AssigneeResponse
