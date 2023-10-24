@@ -166,6 +166,6 @@ class Request_body():
         }
         return json
 
-    @staticmethod
-    def json_done_key_result_metric():
-        json = {currentProgress: currentProgress}
+    # @staticmethod
+    # def json_done_key_result_metric():
+    #     json = {currentProgress: currentProgress}

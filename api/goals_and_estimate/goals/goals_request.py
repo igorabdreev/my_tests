@@ -85,7 +85,7 @@ class Goals(Request):
             json: тело запроса
         """
 
-        return self.request(method='PATCH', url=f'{self.url}/goals/{goal_id}/weight', json=json)
+        return self.request(method='POST', url=f'{self.url}/goals/{goal_id}/weight', json=json)
 
     def get_goals_on_id(self, goal_id: str) -> Response:
         """Получить цель по id

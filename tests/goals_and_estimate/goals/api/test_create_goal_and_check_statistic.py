@@ -143,7 +143,7 @@ class TestCrateGoalsAndCheckStatistic(GoalsAPI):
         )
 
     @mark.dependency(depends=['create_goal', 'create_key_result', 'edit_key_result_metric'])
-    def test_get_weight_on_goal_after_edit_weight(self, auth_api: str, get_weight_on_goal):
+    def test_get_weight_on_goal_after_edit_metric(self, auth_api: str, get_weight_on_goal):
         """Тест для проверки получения прогресса виджета на главной странице цели после изменения метрики
         """
         assert get_weight_on_goal[0] == 70, Ansver.ERROR_MSG_WITHOUT_WIDGET_AFTER_EDIT_METRIC.format(
@@ -152,7 +152,7 @@ class TestCrateGoalsAndCheckStatistic(GoalsAPI):
             code="главной")
 
     @mark.dependency(depends=['create_goal', 'create_key_result', 'edit_key_result_metric'])
-    def test_statistic_in_statistic_after_edit_weight(self, auth_api: str, get_statistics_team_table,
+    def test_statistic_in_statistic_after_edit_metric(self, auth_api: str, get_statistics_team_table,
                                                       get_weight_on_goal):
         """Тест для проверки прогресса виджета после изменения прогресса метрического КР
         """
@@ -163,22 +163,23 @@ class TestCrateGoalsAndCheckStatistic(GoalsAPI):
             1], Ansver.ERROR_MSG_WITH_WIDGET_AFTER_EDIT_METRIC.format(
             code="статистике")
 
-    # @mark.dependency(name='edit_weight_goal',depends=['create_goal', 'create_key_result','edit_key_result_metric'])
-    # def test_edit_weight_goal(self, auth_api: str):
-    #     """Изменение веса цели
-    #     """
-    #     Goals().edit_weight_goal(
-    #         goal_id=self.goal_id,
-    #         json=Request_body().json_create_weight()
-    #     )
-    #
-    # @mark.dependency(depends=['create_goal', 'create_key_result','edit_key_result_metric','edit_weight_goal'])
-    # def test_statistic_in_statistic_after_edit_weight(self, auth_api: str, get_statistics_team_table, get_weight_on_goal):
-    #     """Тест для проверки прогресса виджета в после изменения веса
-    #     """
-    #     assert get_weight_on_goal[1] == 22, ERROR_MSG_WIDGET.format(
-    #         json=get_weight_on_goal[1])
-    #     assert get_statistics_team_table[1] == get_weight_on_goal[1]
+    @mark.dependency(name='edit_weight_goal',depends=['create_goal', 'create_key_result','edit_key_result_metric'])
+    def test_edit_weight_goal(self, auth_api: str):
+        """Изменение веса цели
+        """
+        Goals().edit_weight_goal(
+            goal_id=self.goal_id,
+            json=Request_body().json_create_weight()
+        )
+
+    @mark.dependency(depends=['create_goal', 'create_key_result','edit_key_result_metric', 'edit_weight_goal'])
+    def test_statistic_in_statistic_after_edit_weight(self, auth_api: str, get_statistics_team_table, get_weight_on_goal):
+        """Тест для проверки прогресса виджета после изменения веса
+        """
+        assert get_weight_on_goal[1] == 17, Ansver.ERROR_MSG_WITH_WIDGET_AFTER_EDIT_WIDGET.format(
+            code="главной")
+        assert get_statistics_team_table[1] == get_weight_on_goal[1], Ansver.ERROR_MSG_WITH_WIDGET_AFTER_EDIT_WIDGET.format(
+            code="статистике")
 
     @mark.dependency(name='delete_key_result', depends=['create_goal', 'create_key_result'])
     def test_delete_key_result(self, auth_api: str):
@@ -190,17 +191,17 @@ class TestCrateGoalsAndCheckStatistic(GoalsAPI):
 
     @mark.dependency(depends=['create_goal', 'create_key_result', 'delete_key_result'])
     def test_get_weight_on_goal_after_delete_kr(self, auth_api: str, get_weight_on_goal):
-        """Тест для проверки получения прогресса виджета на главной странице цели после изменения метрики
+        """Тест для проверки получения прогресса виджета на главной странице цели после удаления бинарного КР
         """
         assert get_weight_on_goal[0] == 40, Ansver.ERROR_MSG_WITHOUT_WIDGET_AFTER_DELETE_BINARY.format(
             code="главной")
-        assert get_weight_on_goal[1] == 20, Ansver.ERROR_MSG_WITH_WIDGET_AFTER_DELETE_BINARY.format(
+        assert get_weight_on_goal[1] == 10, Ansver.ERROR_MSG_WITH_WIDGET_AFTER_DELETE_BINARY.format(
             code="главной")
 
     @mark.dependency(depends=['create_goal', 'create_key_result'])
     def test_statistic_in_statistic_after_delete_kr(self, auth_api: str, get_statistics_team_table,
                                                     get_weight_on_goal):
-        """Тест для проверки прогресса виджета после изменения прогресса метрического КР
+        """Тест для проверки прогресса виджета после удаления бинарного КР
         """
         assert get_weight_on_goal[0] == get_statistics_team_table[
             0], Ansver.ERROR_MSG_WITHOUT_WIDGET_AFTER_DELETE_BINARY.format(
