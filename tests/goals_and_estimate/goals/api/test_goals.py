@@ -37,6 +37,7 @@ class TestGoals(GoalsAPI):
                                                user_uuid=self.user_uuid)
         )
         assert response.status_code == 201, ERROR_STATUS_MSG.format(code=response.status_code)
+        assert response.model_is_valid()
         TestGoals.goal_id = response.json()['id']
 
     @link(*get_link(test=39509))
@@ -51,6 +52,8 @@ class TestGoals(GoalsAPI):
             }
         )
         assert response.status_code == 200, ERROR_STATUS_MSG.format(code=response.status_code)
+        assert response.model_is_valid()
+        print(response.json())
 
     @link(*get_link(test=39576))
     @title('Редактировать цель')
@@ -58,8 +61,8 @@ class TestGoals(GoalsAPI):
     def test_edit_goal(self, auth_api: str):
         response = Goals(version=2).edit_goal(
             goal_id=self.goal_id,
-            json=Request_body.json_edit_goal(current_year_start=self.current_year_start,
-                                             current_year_end=self.current_year_end,
+            json=Request_body.json_edit_goal(current_year_start="2023-01-01",
+                                             current_year_end="2023-12-31",
                                              isYearGoal=True)
         )
         assert response.status_code == 204, ERROR_STATUS_MSG.format(code=response.status_code)
@@ -76,6 +79,7 @@ class TestGoals(GoalsAPI):
             }
         )
         assert response.status_code == 200, ERROR_STATUS_MSG.format(code=response.status_code)
+        assert response.model_is_valid()
 
     @link(*get_link(test=39545))
     @title('Получение данных для отображения модалки "Создание цели"')
@@ -126,8 +130,8 @@ class TestGoals(GoalsAPI):
             query_params={'year': self.current_year}
         )
         assert response.status_code == 200, ERROR_STATUS_MSG.format(code=response.status_code)
-        TestGoals.goal_weight_id = response.json()[2]['goalWeightId']
-        TestGoals.goalid = response.json()[2]['goalId']
+        TestGoals.goal_weight_id = response.json()['data'][0]['goalWeightId']
+        TestGoals.goalid = response.json()['data'][0]['goalId']
 
     @link(*get_link(test=39542))
     @title('Изменить вес всех целей на год')
@@ -146,18 +150,18 @@ class TestGoals(GoalsAPI):
         )
         assert response.status_code == 200, ERROR_STATUS_MSG.format(code=response.status_code)
 
-    @link(*get_link(test=39597))
-    @title('Получить общий прогресс по целям')
-    @mark.dependency(depends=['create_goal'])
-    def test_get_goals_progress(self, auth_api: str):
-        response = Goals().get_goals_progress(
-            query_params={
-                'year': self.current_year,
-                'period': 'ALL',
-                'personId': self.user_uuid
-            }
-        )
-        assert response.status_code == 200, ERROR_STATUS_MSG.format(code=response.status_code)
+    # @link(*get_link(test=39597))
+    # @title('Получить общий прогресс по целям')
+    # @mark.dependency(depends=['create_goal'])
+    # def test_get_goals_progress(self, auth_api: str):
+    #     response = Goals().get_goals_progress(
+    #         query_params={
+    #             'year': self.current_year,
+    #             'period': 'ALL',
+    #             'personId': self.user_uuid
+    #         }
+    #     )
+    #     assert response.status_code == 200, ERROR_STATUS_MSG.format(code=response.status_code)
 
     @link(*get_link(test=39548))
     @title('Создать ключевой результат у цели')

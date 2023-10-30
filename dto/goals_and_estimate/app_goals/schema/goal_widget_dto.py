@@ -84,6 +84,13 @@ class WidgetInfoBlockStatisticsResponseV3(GoalsDto):
     keyResults: WidgetInfoBlockKeyResultV3
     goals: WidgetInfoBlockGoalsV3
 
+class VisibleAnalitics(WidgetInfoBlockStatisticsResponseV3):
+    """Видимость аналитики"""
+    visibleAnalytics: StrictBool
+
+class GoalDashboardBar(WidgetInfoBlockStatisticsResponseV3):
+    """ Дашборд на главной """
+
 
 class WidgetInfoBlockResponseV3(GoalsDto):
     """ Виджет инфо-блока ответа """

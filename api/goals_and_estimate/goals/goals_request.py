@@ -4,13 +4,11 @@ from services import Services
 from requests import Response
 from api.custom_requests import Request
 from api.goals_and_estimate.goals.goals_response import GoalServiceResponse
-from dto.goals_and_estimate.app_goals.schema.goal_request_dto import (
-    AbstractGoalEditRequest,
-    CreateGoalForOtherRequestV1,
-    CreateGoalRequestV1
-)
+from dto.goals_and_estimate.app_goals.schema.goal_widget_dto import GoalDashboardBar, WidgetInfoBlockStatisticsResponseV3
+
 from dto.goals_and_estimate.app_goals.schema.goals_response_dto import (
     GoalFullAloneResponse,
+    GoalFullBaseResponse,
     GoalInfoShortResponseV2,
     GoalsWithMetaDataResponse,
     KitPersonInviteResponse
@@ -45,13 +43,22 @@ class Goals(Request):
                                    data_model=GoalFullAloneResponse)
 
 
-    def get_goal(self, query_params: dict) -> Response:
+    # def get_goal(self, query_params: dict) -> Response:
+    #     """ Получить текущие цели
+    #
+    #     Args:
+    #         query_params: query параметры запроса
+    #     """
+    #     return self.request(method='GET', url=f'{self.url}/dashboard/bar', params=query_params)
+
+    def get_goal(self, query_params: dict) -> GoalServiceResponse:
         """ Получить текущие цели
 
         Args:
             query_params: query параметры запроса
         """
-        return self.request(method='GET', url=f'{self.url}/dashboard/bar', params=query_params)
+        return GoalServiceResponse(response=self.request(method='GET', url=f'{self.url}/dashboard/bar', params=query_params),
+                                   data_model=WidgetInfoBlockStatisticsResponseV3)
 
     def get_modal_window_for_create_goal(self) -> Response:
         """Получение данных для отображения модалки 'Создание цели'
@@ -68,14 +75,15 @@ class Goals(Request):
         """
         return self.request(method='POST', url=f'{self.url}/goals/{goal_id}', json=json)
 
-    def get_goal_for_goals_panel(self, query_params: dict) -> Response:
+    def get_goal_for_goals_panel(self, query_params: dict) -> GoalServiceResponse:
         """Получение целей для панели целей
 
         Args:
             query_params: query параметры запроса
         """
 
-        return self.request(method='GET', url=f'{self.url}/goals/panel', params=query_params)
+        return GoalServiceResponse(response=self.request(method='GET', url=f'{self.url}/goals/panel', params=query_params),
+                                   data_model=GoalsWithMetaDataResponse)
 
     def edit_weight_goal(self, goal_id: str, json: dict) -> Response:
         """Редактировать вес цели для цели id
@@ -117,7 +125,7 @@ class Goals(Request):
         Args:
             json: тело запроса
         """
-        return self.request(method='PATCH', url=f'{self.url}/goals/weight/rebalance', json=json)
+        return self.request(method='POST', url=f'{self.url}/goals/weight/rebalance', json=json)
 
     def get_goals_progress(self, query_params: dict) -> Response:
         """Получить общий прогресс по целям

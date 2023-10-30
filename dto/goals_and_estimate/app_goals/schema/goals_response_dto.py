@@ -214,3 +214,4 @@ class LinkAreaResponse(GoalsDto):
     parentGoal: GoalNodeAreaResponse
     goal: GoalNodeAreaResponse
     childrenGoals: list[GoalNodeAreaResponse]
+
